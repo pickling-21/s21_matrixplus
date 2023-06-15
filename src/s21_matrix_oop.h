@@ -1,5 +1,5 @@
-#ifndef S21MATRIX_H
-#define S21MATRIX_H
+#ifndef S21_MATRIX_OOP_H
+#define S21_MATRIX_OOP_H
 
 #include <cmath>
 #include <iostream>
@@ -8,6 +8,9 @@ class S21Matrix {
   // attributes
   int rows_, cols_;  // rows and columns attributes
   double** matrix_;  // pointer to the memory where the matrix will be allocated
+  void Create(int rows, int cols);
+  void Swap(S21Matrix& other);
+  S21Matrix Minor(int row, int col);
 
  public:
   S21Matrix();                            // default constructor
@@ -16,8 +19,6 @@ class S21Matrix {
   S21Matrix(S21Matrix&& other) noexcept;  // move cnstructor
   ~S21Matrix();                           // destructor
 
-  void swap(S21Matrix& other);
-  S21Matrix minor(int row, int col);
   // some operators overloads
   double& operator()(int row, int col);  // index operator overload
   double& operator()(int row, int col) const;
@@ -47,6 +48,16 @@ class S21Matrix {
   S21Matrix CalcComplements();
   double Determinant();
   S21Matrix InverseMatrix();
+
+  int GetRows();
+  void SetRows(const int rows);
+
+  int GetCols();
+  void SetCols(const int cols);
+  // DELETE
+
+  void FillingMatrix();
+  void ZeroingMatrix();
 };
 
-#endif
+#endif  // S21_MATRIX_OOP_H
