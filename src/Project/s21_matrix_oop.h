@@ -59,6 +59,7 @@ class S21Matrix {
   bool IsEmpty();
   void FillingMatrix();
   void ZeroingMatrix();
+  void OneMatrix();
   void print_matrix();
 };
 

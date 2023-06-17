@@ -176,9 +176,9 @@ void S21Matrix::MulMatrix(const S21Matrix &other) {
 }
 
 S21Matrix S21Matrix::Transpose() {
-  S21Matrix result(rows_, cols_);
-  for (size_t i = 0; i < (size_t)rows_; ++i) {
-    for (size_t j = 0; j < (size_t)cols_; ++j) {
+  S21Matrix result(cols_, rows_);
+  for (size_t i = 0; i < (size_t)cols_; ++i) {
+    for (size_t j = 0; j < (size_t)rows_; ++j) {
       result.matrix_[i][j] = matrix_[j][i];
     }
   }
@@ -211,18 +211,17 @@ double S21Matrix::Determinant() {
   } else {
     for (size_t j = 0; j < (size_t)cols_; ++j) {
       S21Matrix Minor = this->Minor(0, j);
-      result += matrix_[0][j] * pow(-1, j + 2) *
-                Determinant();  // this->Determinant()???
+      result += matrix_[0][j] * pow(-1, j) * Minor.Determinant();
     }
   }
   return result;
 }
 
 S21Matrix S21Matrix::Minor(int row, int col) {
-  S21Matrix result(rows_, cols_);
-  for (size_t i, min_i = 0; min_i < (size_t)result.rows_; ++min_i) {
+  S21Matrix result(rows_ - 1, cols_ - 1);
+  for (size_t i = 0, min_i = 0; min_i < (size_t)result.rows_; ++min_i) {
     if ((size_t)row == i) ++i;
-    for (size_t j, min_j = 0; min_j < (size_t)result.cols_; ++min_j) {
+    for (size_t j = 0, min_j = 0; min_j < (size_t)result.cols_; ++min_j) {
       if ((size_t)col == j) ++j;
       result.matrix_[min_i][min_j] = matrix_[i][j];
       ++j;
@@ -311,6 +310,14 @@ void S21Matrix::ZeroingMatrix() {
   for (size_t i = 0; i < (size_t)rows_; i++) {
     for (size_t j = 0; j < (size_t)cols_; ++j) {
       matrix_[i][j] = 0;
+    }
+  }
+}
+
+void S21Matrix::OneMatrix() {
+  for (size_t i = 0; i < (size_t)rows_; i++) {
+    for (size_t j = 0; j < (size_t)cols_; ++j) {
+      matrix_[i][j] = 1;
     }
   }
 }

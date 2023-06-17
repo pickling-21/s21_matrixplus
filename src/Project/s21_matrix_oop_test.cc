@@ -172,7 +172,223 @@ TEST(eq_suite, accuracy_1) {
   EXPECT_TRUE(a.EqMatrix(b));
 }
 
-int main(int argc, char **argv) {
+TEST(sum_suite, basic) {
+  S21Matrix a(2, 2);
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+  a(1, 0) = 3;
+  a(1, 1) = 4;
+
+  S21Matrix b(2, 2);
+  b(0, 0) = 5;
+  b(0, 1) = 6;
+  b(1, 0) = 7;
+  b(1, 1) = 8;
+
+  a.SumMatrix(b);
+
+  EXPECT_EQ(a(0, 0), 6);
+  EXPECT_EQ(a(0, 1), 8);
+  EXPECT_EQ(a(1, 0), 10);
+  EXPECT_EQ(a(1, 1), 12);
+}
+
+TEST(sum_suite, exception) {
+  S21Matrix a(2, 2);
+  S21Matrix b(24, 2);
+  EXPECT_THROW(a.SumMatrix(b), std::out_of_range);
+}
+
+TEST(sub_suite, basic) {
+  S21Matrix a(2, 2);
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+  a(1, 0) = 3;
+  a(1, 1) = 4;
+
+  S21Matrix b(2, 2);
+  b(0, 0) = 5;
+  b(0, 1) = 6;
+  b(1, 0) = 7;
+  b(1, 1) = 8;
+
+  a.SubMatrix(b);
+
+  EXPECT_EQ(a(0, 0), -4);
+  EXPECT_EQ(a(0, 1), -4);
+  EXPECT_EQ(a(1, 0), -4);
+  EXPECT_EQ(a(1, 1), -4);
+}
+
+TEST(sub_suite, exception) {
+  S21Matrix a(2, 2);
+  S21Matrix b(24, 2);
+  EXPECT_THROW(a.SubMatrix(b), std::out_of_range);
+}
+
+TEST(mul_number_suite, basic) {
+  S21Matrix a(2, 2);
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+  a(1, 0) = 3;
+  a(1, 1) = 4;
+
+  double num = 2.0;
+  a.MulNumber(num);
+
+  EXPECT_EQ(a(0, 0), 2);
+  EXPECT_EQ(a(0, 1), 4);
+  EXPECT_EQ(a(1, 0), 6);
+  EXPECT_EQ(a(1, 1), 8);
+}
+TEST(mul_matrix_suite, basic) {
+  S21Matrix a(2, 3);
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+  a(0, 2) = 3;
+  a(1, 0) = 4;
+  a(1, 1) = 5;
+  a(1, 2) = 6;
+
+  S21Matrix b(3, 2);
+  b(0, 0) = 7;
+  b(0, 1) = 8;
+  b(1, 0) = 9;
+  b(1, 1) = 10;
+  b(2, 0) = 11;
+  b(2, 1) = 12;
+
+  a.MulMatrix(b);
+
+  EXPECT_EQ(a(0, 0), 58);
+  EXPECT_EQ(a(0, 1), 64);
+  EXPECT_EQ(a(1, 0), 139);
+  EXPECT_EQ(a(1, 1), 154);
+}
+
+TEST(mul_matrix_suite, random_number) {
+  S21Matrix matrix1(3, 4);
+  S21Matrix matrix2(4, 5);
+
+  // Заполнение матриц случайными числами
+  srand(time(nullptr));
+  for (size_t i = 0; i < (size_t)matrix1.GetRows(); ++i) {
+    for (size_t j = 0; j < (size_t)matrix1.GetCols(); ++j) {
+      matrix1(i, j) = rand() % 10;
+    }
+  }
+
+  for (size_t i = 0; i < (size_t)matrix2.GetRows(); ++i) {
+    for (size_t j = 0; j < (size_t)matrix2.GetCols(); ++j) {
+      matrix2(i, j) = rand() % 10;
+    }
+  }
+
+  S21Matrix expected_result(3, 5);
+
+  // Вычисление ожидаемого результата
+  for (size_t i = 0; i < (size_t)expected_result.GetRows(); ++i) {
+    for (size_t j = 0; j < (size_t)expected_result.GetCols(); ++j) {
+      expected_result(i, j) = 0;
+      for (size_t k = 0; k < (size_t)matrix1.GetCols(); ++k) {
+        expected_result(i, j) =
+            expected_result(i, j) + matrix1(i, k) * matrix2(k, j);
+      }
+    }
+  }
+
+  matrix1.MulMatrix(matrix2);
+  EXPECT_TRUE(matrix1.EqMatrix(expected_result));
+}
+
+TEST(mul_matrix_suite, exception) {
+  S21Matrix a(2, 2);
+  S21Matrix b(24, 2);
+  EXPECT_THROW(a.MulMatrix(b), std::out_of_range);
+}
+
+TEST(transpose_suite, basic) {
+  S21Matrix a(2, 3);
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+  a(0, 2) = 3;
+  a(1, 0) = 4;
+  a(1, 1) = 5;
+  a(1, 2) = 6;
+  S21Matrix result = a.Transpose();
+  EXPECT_EQ(result(0, 0), 1);
+  EXPECT_EQ(result(0, 1), 4);
+  EXPECT_EQ(result(1, 0), 2);
+  EXPECT_EQ(result(1, 1), 5);
+  EXPECT_EQ(result(2, 0), 3);
+  EXPECT_EQ(result(2, 1), 6);
+}
+
+TEST(calc_complements_suite, basic) {
+  S21Matrix a(3, 3);
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+  a(0, 2) = 3;
+  a(1, 0) = 4;
+  a(1, 1) = 5;
+  a(1, 2) = 6;
+  a(2, 0) = 7;
+  a(2, 1) = 8;
+  a(2, 2) = 9;
+
+  S21Matrix result = a.CalcComplements();
+
+  EXPECT_EQ(result(0, 0), -3);
+  EXPECT_EQ(result(0, 1), 6);
+  EXPECT_EQ(result(0, 2), -3);
+  EXPECT_EQ(result(1, 0), 6);
+  EXPECT_EQ(result(1, 1), -12);
+  EXPECT_EQ(result(1, 2), 6);
+  EXPECT_EQ(result(2, 0), -3);
+  EXPECT_EQ(result(2, 1), 6);
+  EXPECT_EQ(result(2, 2), -3);
+}
+
+TEST(determinant_suite, square_matrix) {
+  S21Matrix a(3, 3);
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+  a(0, 2) = 3;
+  a(1, 0) = 4;
+  a(1, 1) = 5;
+  a(1, 2) = 6;
+  a(2, 0) = 7;
+  a(2, 1) = 8;
+  a(2, 2) = 9;
+
+  double result = a.Determinant();
+
+  EXPECT_EQ(result, 0);
+}
+
+TEST(inverse_matrix_suite, basic) {
+  S21Matrix a(2, 2);
+  a(0, 0) = 1;
+  a(0, 1) = 2;
+  a(1, 0) = 3;
+  a(1, 1) = 4;
+
+  S21Matrix result = a.InverseMatrix();
+
+  EXPECT_EQ(result(0, 0), -2);
+  EXPECT_EQ(result(0, 1), 1);
+  EXPECT_EQ(result(1, 0), 1.5);
+  EXPECT_EQ(result(1, 1), -0.5);
+}
+
+TEST(inverse_matrix_suite, det_is_zero) {
+  S21Matrix mat(2, 2);
+  mat.OneMatrix();
+  // S21Matrix res = mat.InverseMatrix();
+  // res.print_matrix();
+  EXPECT_THROW(mat.InverseMatrix(), std::invalid_argument);
+}
+int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
