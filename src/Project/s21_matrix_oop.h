@@ -57,9 +57,9 @@ class S21Matrix {
   // DELETE
 
   bool IsEmpty();
-  void FillingMatrix();
+  void FillingMatrixRandom();
   void ZeroingMatrix();
-  void OneMatrix();
+  void FillingMatrixNumber(double number);
   void print_matrix();
 };
 

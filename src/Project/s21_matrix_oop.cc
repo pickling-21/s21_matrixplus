@@ -298,26 +298,19 @@ S21Matrix &S21Matrix::operator*=(const double num) {
 
 // DELETE
 
-void S21Matrix::FillingMatrix() {
-  for (size_t i = 0; i < (size_t)rows_; i++) {
+void S21Matrix::FillingMatrixRandom() {
+  srand(time(nullptr));
+  for (size_t i = 0; i < (size_t)rows_; ++i) {
     for (size_t j = 0; j < (size_t)cols_; ++j) {
-      matrix_[i][j] = i * 2 + j + 1;
+      matrix_[i][j] = rand() % 10;
     }
   }
 }
 
-void S21Matrix::ZeroingMatrix() {
+void S21Matrix::FillingMatrixNumber(double number) {
   for (size_t i = 0; i < (size_t)rows_; i++) {
     for (size_t j = 0; j < (size_t)cols_; ++j) {
-      matrix_[i][j] = 0;
-    }
-  }
-}
-
-void S21Matrix::OneMatrix() {
-  for (size_t i = 0; i < (size_t)rows_; i++) {
-    for (size_t j = 0; j < (size_t)cols_; ++j) {
-      matrix_[i][j] = 1;
+      matrix_[i][j] = number;
     }
   }
 }
@@ -340,7 +333,6 @@ void S21Matrix::SetRows(const int rows) {
       }
     }
   }
-  result.print_matrix();
   *this = result;
 }
 
