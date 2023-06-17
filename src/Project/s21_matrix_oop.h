@@ -1,8 +1,6 @@
 #ifndef S21_MATRIX_OOP_H
 #define S21_MATRIX_OOP_H
 
-#include <cmath>
-#include <iostream>
 class S21Matrix {
  private:
   // attributes
@@ -24,6 +22,8 @@ class S21Matrix {
   double& operator()(int row, int col) const;
 
   S21Matrix& operator=(const S21Matrix& other);  // assignment operator overload
+  S21Matrix& operator=(S21Matrix&& other);
+
   bool operator==(const S21Matrix& other);
 
   S21Matrix& operator+=(const S21Matrix& other);
@@ -56,8 +56,10 @@ class S21Matrix {
   void SetCols(const int cols);
   // DELETE
 
+  bool IsEmpty();
   void FillingMatrix();
   void ZeroingMatrix();
+  void print_matrix();
 };
 
 #endif  // S21_MATRIX_OOP_H
