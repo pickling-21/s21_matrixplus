@@ -1,15 +1,9 @@
 #ifndef S21_MATRIX_OOP_H
 #define S21_MATRIX_OOP_H
 
-class S21Matrix {
- private:
-  // attributes
-  int rows_, cols_;  // rows and columns attributes
-  double** matrix_;  // pointer to the memory where the matrix will be allocated
-  void Create(int rows, int cols);
-  void Swap(S21Matrix& other);
-  S21Matrix Minor(int row, int col);
+constexpr double eps = 1e-7;
 
+class S21Matrix {
  public:
   S21Matrix();                            // default constructor
   S21Matrix(int rows, int cols);          // parameterized constructor
@@ -23,8 +17,6 @@ class S21Matrix {
 
   S21Matrix& operator=(const S21Matrix& other);  // assignment operator overload
   S21Matrix& operator=(S21Matrix&& other);
-
-  bool operator==(const S21Matrix& other);
 
   S21Matrix& operator+=(const S21Matrix& other);
   S21Matrix operator+(const S21Matrix& other);
@@ -61,6 +53,16 @@ class S21Matrix {
   void ZeroingMatrix();
   void FillingMatrixNumber(double number);
   void print_matrix();
+
+  bool operator==(const S21Matrix& other);
+
+ private:
+  // attributes
+  int rows_, cols_;  // rows and columns attributes
+  double** matrix_;  // pointer to the memory where the matrix will be allocated
+  void Create(int rows, int cols);
+  void Swap(S21Matrix& other);
+  S21Matrix Minor(int row, int col);
 };
 
 #endif  // S21_MATRIX_OOP_H
