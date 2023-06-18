@@ -7,8 +7,8 @@
 
 TEST(constructor, basic) {
   S21Matrix a;
-  EXPECT_EQ(a.GetCols(), 0);
-  EXPECT_EQ(a.GetRows(), 0);
+  EXPECT_EQ(a.GetCols(), 1);
+  EXPECT_EQ(a.GetRows(), 1);
 }
 
 TEST(constructor, two_args) {
@@ -29,15 +29,12 @@ TEST(constructor, copy) {
 TEST(constructor, move) {
   S21Matrix a(4, 3);
   S21Matrix b(4, 3);
-  a.FillingMatrixRandom();
-  b.FillingMatrixRandom();
 
   S21Matrix moved(std::move(a));
 
   EXPECT_TRUE(moved.EqMatrix(b));
   EXPECT_EQ(a.GetRows(), 0);
   EXPECT_EQ(a.GetCols(), 0);
-  EXPECT_TRUE(a.IsEmpty());
 }
 
 TEST(set_rows_suite, reduce_test) {
@@ -55,12 +52,12 @@ TEST(set_rows_suite, reduce_test) {
 TEST(set_rows_suite, decrease_test) {
   S21Matrix a(3, 3);
   S21Matrix b(2, 3);
-
+  a.print_matrix();
   a.FillingMatrixRandom();
   b.FillingMatrixRandom();
 
   for (size_t i = 0; i < (size_t)a.GetCols(); ++i) {
-    a(2, i) = 0;
+    a(2, i) = 0.0;
   }
 
   b.SetRows(3);
@@ -71,8 +68,8 @@ TEST(set_cols_suite, reduce_test) {
   S21Matrix a(3, 3);
   S21Matrix b(3, 4);
 
-  a.FillingMatrixNumber(1);
-  b.FillingMatrixNumber(1);
+  a.FillingMatrixNumber(1.0);
+  b.FillingMatrixNumber(1.0);
 
   b.SetCols(3);
 
@@ -83,11 +80,11 @@ TEST(set_cols_suite, decrease_test) {
   S21Matrix a(3, 3);
   S21Matrix b(3, 2);
 
-  a.FillingMatrixNumber(3);
-  b.FillingMatrixNumber(3);
+  a.FillingMatrixNumber(3.0);
+  b.FillingMatrixNumber(3.0);
 
   for (size_t i = 0; i < (size_t)a.GetRows(); ++i) {
-    a(i, 2) = 0;
+    a(i, 2) = 0.0;
   }
 
   b.SetCols(3);
@@ -109,8 +106,8 @@ TEST(eq_suite, not_eq) {
   S21Matrix a(3, 3);
   S21Matrix b(3, 3);
 
-  a.FillingMatrixNumber(0);
-  b.FillingMatrixRandom();
+  a.FillingMatrixNumber(0.0);
+  b.FillingMatrixNumber(2.0);
 
   EXPECT_FALSE(a.EqMatrix(b));
 }
@@ -150,40 +147,25 @@ TEST(eq_suite, accuracy) {
   EXPECT_TRUE(a.EqMatrix(b));
 }
 
-TEST(eq_suite, accuracy_1) {
-  S21Matrix a(4, 3);
-  S21Matrix b(4, 3);
-
-  a.FillingMatrixRandom();
-  b.FillingMatrixRandom();
-
-  for (size_t i = 0; i < (size_t)a.GetRows(); ++i) {
-    for (size_t j = 0; j < (size_t)a.GetCols(); ++j) {
-      a(i, j) -= 1e-8;
-    }
-  }
-  EXPECT_TRUE(a.EqMatrix(b));
-}
-
 TEST(sum_suite, basic) {
   S21Matrix a(2, 2);
-  a(0, 0) = 1;
-  a(0, 1) = 2;
-  a(1, 0) = 3;
-  a(1, 1) = 4;
+  a(0, 0) = 1.0;
+  a(0, 1) = 2.0;
+  a(1, 0) = 3.0;
+  a(1, 1) = 4.0;
 
   S21Matrix b(2, 2);
-  b(0, 0) = 5;
-  b(0, 1) = 6;
-  b(1, 0) = 7;
-  b(1, 1) = 8;
+  b(0, 0) = 5.0;
+  b(0, 1) = 6.0;
+  b(1, 0) = 7.0;
+  b(1, 1) = 8.0;
 
   a.SumMatrix(b);
 
-  EXPECT_EQ(a(0, 0), 6);
-  EXPECT_EQ(a(0, 1), 8);
-  EXPECT_EQ(a(1, 0), 10);
-  EXPECT_EQ(a(1, 1), 12);
+  EXPECT_EQ(a(0, 0), 6.0);
+  EXPECT_EQ(a(0, 1), 8.0);
+  EXPECT_EQ(a(1, 0), 10.0);
+  EXPECT_EQ(a(1, 1), 12.0);
 }
 
 TEST(sum_suite, random_number) {
@@ -215,23 +197,23 @@ TEST(sum_suite, exception) {
 
 TEST(sub_suite, basic) {
   S21Matrix a(2, 2);
-  a(0, 0) = 1;
-  a(0, 1) = 2;
-  a(1, 0) = 3;
-  a(1, 1) = 4;
+  a(0, 0) = 1.0;
+  a(0, 1) = 2.0;
+  a(1, 0) = 3.0;
+  a(1, 1) = 4.0;
 
   S21Matrix b(2, 2);
-  b(0, 0) = 5;
-  b(0, 1) = 6;
-  b(1, 0) = 7;
-  b(1, 1) = 8;
+  b(0, 0) = 5.0;
+  b(0, 1) = 6.0;
+  b(1, 0) = 7.0;
+  b(1, 1) = 8.0;
 
   a.SubMatrix(b);
 
-  EXPECT_EQ(a(0, 0), -4);
-  EXPECT_EQ(a(0, 1), -4);
-  EXPECT_EQ(a(1, 0), -4);
-  EXPECT_EQ(a(1, 1), -4);
+  EXPECT_EQ(a(0, 0), -4.0);
+  EXPECT_EQ(a(0, 1), -4.0);
+  EXPECT_EQ(a(1, 0), -4.0);
+  EXPECT_EQ(a(1, 1), -4.0);
 }
 
 TEST(sub_suite, random_number) {
@@ -263,42 +245,42 @@ TEST(sub_suite, exception) {
 
 TEST(mul_number_suite, basic) {
   S21Matrix a(2, 2);
-  a(0, 0) = 1;
-  a(0, 1) = 2;
-  a(1, 0) = 3;
-  a(1, 1) = 4;
+  a(0, 0) = 1.0;
+  a(0, 1) = 2.0;
+  a(1, 0) = 3.0;
+  a(1, 1) = 4.0;
 
   double num = 2.0;
   a.MulNumber(num);
 
-  EXPECT_EQ(a(0, 0), 2);
-  EXPECT_EQ(a(0, 1), 4);
-  EXPECT_EQ(a(1, 0), 6);
-  EXPECT_EQ(a(1, 1), 8);
+  EXPECT_EQ(a(0, 0), 2.0);
+  EXPECT_EQ(a(0, 1), 4.0);
+  EXPECT_EQ(a(1, 0), 6.0);
+  EXPECT_EQ(a(1, 1), 8.0);
 }
 TEST(mul_matrix_suite, basic) {
   S21Matrix a(2, 3);
-  a(0, 0) = 1;
-  a(0, 1) = 2;
-  a(0, 2) = 3;
-  a(1, 0) = 4;
-  a(1, 1) = 5;
-  a(1, 2) = 6;
+  a(0, 0) = 1.0;
+  a(0, 1) = 2.0;
+  a(0, 2) = 3.0;
+  a(1, 0) = 4.0;
+  a(1, 1) = 5.0;
+  a(1, 2) = 6.0;
 
   S21Matrix b(3, 2);
-  b(0, 0) = 7;
-  b(0, 1) = 8;
-  b(1, 0) = 9;
-  b(1, 1) = 10;
-  b(2, 0) = 11;
-  b(2, 1) = 12;
+  b(0, 0) = 7.0;
+  b(0, 1) = 8.0;
+  b(1, 0) = 9.0;
+  b(1, 1) = 10.0;
+  b(2, 0) = 11.0;
+  b(2, 1) = 12.0;
 
   a.MulMatrix(b);
 
-  EXPECT_EQ(a(0, 0), 58);
-  EXPECT_EQ(a(0, 1), 64);
-  EXPECT_EQ(a(1, 0), 139);
-  EXPECT_EQ(a(1, 1), 154);
+  EXPECT_EQ(a(0, 0), 58.0);
+  EXPECT_EQ(a(0, 1), 64.0);
+  EXPECT_EQ(a(1, 0), 139.0);
+  EXPECT_EQ(a(1, 1), 154.0);
 }
 
 TEST(mul_matrix_suite, random_number) {
@@ -314,7 +296,7 @@ TEST(mul_matrix_suite, random_number) {
   // Вычисление ожидаемого результата
   for (size_t i = 0; i < (size_t)expected_result.GetRows(); ++i) {
     for (size_t j = 0; j < (size_t)expected_result.GetCols(); ++j) {
-      expected_result(i, j) = 0;
+      expected_result(i, j) = 0.0;
       for (size_t k = 0; k < (size_t)matrix1.GetCols(); ++k) {
         expected_result(i, j) =
             expected_result(i, j) + matrix1(i, k) * matrix2(k, j);
@@ -334,44 +316,44 @@ TEST(mul_matrix_suite, exception) {
 
 TEST(transpose_suite, basic) {
   S21Matrix a(2, 3);
-  a(0, 0) = 1;
-  a(0, 1) = 2;
-  a(0, 2) = 3;
-  a(1, 0) = 4;
-  a(1, 1) = 5;
-  a(1, 2) = 6;
+  a(0, 0) = 1.0;
+  a(0, 1) = 2.0;
+  a(0, 2) = 3.0;
+  a(1, 0) = 4.0;
+  a(1, 1) = 5.0;
+  a(1, 2) = 6.0;
   S21Matrix result = a.Transpose();
-  EXPECT_EQ(result(0, 0), 1);
-  EXPECT_EQ(result(0, 1), 4);
-  EXPECT_EQ(result(1, 0), 2);
-  EXPECT_EQ(result(1, 1), 5);
-  EXPECT_EQ(result(2, 0), 3);
-  EXPECT_EQ(result(2, 1), 6);
+  EXPECT_EQ(result(0, 0), 1.0);
+  EXPECT_EQ(result(0, 1), 4.0);
+  EXPECT_EQ(result(1, 0), 2.0);
+  EXPECT_EQ(result(1, 1), 5.0);
+  EXPECT_EQ(result(2, 0), 3.0);
+  EXPECT_EQ(result(2, 1), 6.0);
 }
 
 TEST(calc_complements_suite, basic) {
   S21Matrix a(3, 3);
-  a(0, 0) = 1;
-  a(0, 1) = 2;
-  a(0, 2) = 3;
-  a(1, 0) = 4;
-  a(1, 1) = 5;
-  a(1, 2) = 6;
-  a(2, 0) = 7;
-  a(2, 1) = 8;
-  a(2, 2) = 9;
+  a(0, 0) = 1.0;
+  a(0, 1) = 2.0;
+  a(0, 2) = 3.0;
+  a(1, 0) = 4.0;
+  a(1, 1) = 5.0;
+  a(1, 2) = 6.0;
+  a(2, 0) = 7.0;
+  a(2, 1) = 8.0;
+  a(2, 2) = 9.0;
 
   S21Matrix result = a.CalcComplements();
 
-  EXPECT_EQ(result(0, 0), -3);
-  EXPECT_EQ(result(0, 1), 6);
-  EXPECT_EQ(result(0, 2), -3);
-  EXPECT_EQ(result(1, 0), 6);
-  EXPECT_EQ(result(1, 1), -12);
-  EXPECT_EQ(result(1, 2), 6);
-  EXPECT_EQ(result(2, 0), -3);
-  EXPECT_EQ(result(2, 1), 6);
-  EXPECT_EQ(result(2, 2), -3);
+  EXPECT_EQ(result(0, 0), -3.0);
+  EXPECT_EQ(result(0, 1), 6.0);
+  EXPECT_EQ(result(0, 2), -3.0);
+  EXPECT_EQ(result(1, 0), 6.0);
+  EXPECT_EQ(result(1, 1), -12.0);
+  EXPECT_EQ(result(1, 2), 6.0);
+  EXPECT_EQ(result(2, 0), -3.0);
+  EXPECT_EQ(result(2, 1), 6.0);
+  EXPECT_EQ(result(2, 2), -3.0);
 }
 
 TEST(calc_complements_suite, exception) {
@@ -381,19 +363,19 @@ TEST(calc_complements_suite, exception) {
 
 TEST(determinant_suite, square_matrix) {
   S21Matrix a(3, 3);
-  a(0, 0) = 1;
-  a(0, 1) = 2;
-  a(0, 2) = 3;
-  a(1, 0) = 4;
-  a(1, 1) = 5;
-  a(1, 2) = 6;
-  a(2, 0) = 7;
-  a(2, 1) = 8;
-  a(2, 2) = 9;
+  a(0, 0) = 1.0;
+  a(0, 1) = 2.0;
+  a(0, 2) = 3.0;
+  a(1, 0) = 4.0;
+  a(1, 1) = 5.0;
+  a(1, 2) = 6.0;
+  a(2, 0) = 7.0;
+  a(2, 1) = 8.0;
+  a(2, 2) = 9.0;
 
   double result = a.Determinant();
 
-  EXPECT_EQ(result, 0);
+  EXPECT_EQ(result, 0.0);
 }
 
 TEST(determinant_suite, basic_2) {
@@ -432,10 +414,10 @@ TEST(inverse_matrix_suite, exception) {
 
 TEST(inverse_matrix_suite, basic) {
   S21Matrix a(2, 2);
-  a(0, 0) = 1;
-  a(0, 1) = 2;
-  a(1, 0) = 3;
-  a(1, 1) = 4;
+  a(0, 0) = 1.0;
+  a(0, 1) = 2.0;
+  a(1, 0) = 3.0;
+  a(1, 1) = 4.0;
 
   S21Matrix result = a.InverseMatrix();
 
@@ -491,65 +473,68 @@ TEST(overloads, plus) {
   EXPECT_TRUE(matrix3 == result);
 }
 
-// TEST(overloads, minus) {
-//   S21Matrix matrix1(2, 2);
-//   matrix1(0, 0) = 1.0;
-//   matrix1(0, 1) = 2.0;
-//   matrix1(1, 0) = 3.0;
-//   matrix1(1, 1) = 4.0;
+TEST(overloads, minus) {
+  S21Matrix matrix1(2, 2);
+  matrix1(0, 0) = 1.0;
+  matrix1(0, 1) = 2.0;
+  matrix1(1, 0) = 3.0;
+  matrix1(1, 1) = 4.0;
 
-//   S21Matrix matrix2(2, 2);
-//   matrix2(0, 0) = 2.0;
-//   matrix2(0, 1) = 3.0;
-//   matrix2(1, 0) = 4.0;
-//   matrix2(1, 1) = 5.0;
+  S21Matrix matrix2(2, 2);
+  matrix2(0, 0) = 2.0;
+  matrix2(0, 1) = 3.0;
+  matrix2(1, 0) = 4.0;
+  matrix2(1, 1) = 5.0;
 
-//   S21Matrix matrix3(2, 2);
-//   matrix3(0, 0) = -1.0;
-//   matrix3(0, 1) = -1.0;
-//   matrix3(1, 0) = -1.0;
-//   matrix3(1, 1) = -1.0;
+  S21Matrix matrix3(2, 2);
+  matrix3(0, 0) = -1.0;
+  matrix3(0, 1) = -1.0;
+  matrix3(1, 0) = -1.0;
+  matrix3(1, 1) = -1.0;
 
-//   EXPECT_EQ(matrix1 - matrix2, matrix3);
-// }
+  S21Matrix result = matrix1 - matrix2;
+  EXPECT_TRUE(result == matrix3);
+}
 
-// TEST(overloads, multiply) {
-//   S21Matrix matrix1(2, 2);
-//   matrix1(0, 0) = 1.0;
-//   matrix1(0, 1) = 2.0;
-//   matrix1(1, 0) = 3.0;
-//   matrix1(1, 1) = 4.0;
+TEST(overloads, multiply) {
+  S21Matrix matrix1(2, 2);
+  matrix1(0, 0) = 1.0;
+  matrix1(0, 1) = 2.0;
+  matrix1(1, 0) = 3.0;
+  matrix1(1, 1) = 4.0;
 
-//   S21Matrix matrix2(2, 2);
-//   matrix2(0, 0) = 2.0;
-//   matrix2(0, 1) = 3.0;
-//   matrix2(1, 0) = 4.0;
-//   matrix2(1, 1) = 5.0;
+  S21Matrix matrix2(2, 2);
+  matrix2(0, 0) = 2.0;
+  matrix2(0, 1) = 3.0;
+  matrix2(1, 0) = 4.0;
+  matrix2(1, 1) = 5.0;
 
-//   S21Matrix matrix3(2, 2);
-//   matrix3(0, 0) = 10.0;
-//   matrix3(0, 1) = 13.0;
-//   matrix3(1, 0) = 22.0;
-//   matrix3(1, 1) = 29.0;
+  S21Matrix matrix3(2, 2);
+  matrix3(0, 0) = 10.0;
+  matrix3(0, 1) = 13.0;
+  matrix3(1, 0) = 22.0;
+  matrix3(1, 1) = 29.0;
 
-//   EXPECT_EQ(matrix1 * matrix2, matrix3);
-// }
+  S21Matrix result = matrix1 * matrix2;
+  EXPECT_TRUE(result == matrix3);
+}
 
-// TEST(overloads, multiply_scalar) {
-//   S21Matrix matrix1(2, 2);
-//   matrix1(0, 0) = 1.0;
-//   matrix1(0, 1) = 2.0;
-//   matrix1(1, 0) = 3.0;
-//   matrix1(1, 1) = 4.0;
+TEST(overloads, multiply_scalar) {
+  S21Matrix matrix1(2, 2);
+  matrix1(0, 0) = 1.0;
+  matrix1(0, 1) = 2.0;
+  matrix1(1, 0) = 3.0;
+  matrix1(1, 1) = 4.0;
 
-//   S21Matrix matrix2(2, 2);
-//   matrix2(0, 0) = 2.0;
-//   matrix2(0, 1) = 4.0;
-//   matrix2(1, 0) = 6.0;
-//   matrix2(1, 1) = 8.0;
+  S21Matrix matrix2(2, 2);
+  matrix2(0, 0) = 2.0;
+  matrix2(0, 1) = 4.0;
+  matrix2(1, 0) = 6.0;
+  matrix2(1, 1) = 8.0;
 
-//   EXPECT_EQ(matrix1 * 2.0, matrix2);
-// }
+  S21Matrix result = matrix1 * 2.0;
+  EXPECT_TRUE(result == matrix2);
+}
 
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);

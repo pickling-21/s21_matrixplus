@@ -16,7 +16,7 @@ class S21Matrix {
   double& operator()(int row, int col) const;
 
   S21Matrix& operator=(const S21Matrix& other);  // assignment operator overload
-  S21Matrix& operator=(S21Matrix&& other);
+  S21Matrix& operator=(S21Matrix&& other) noexcept;
 
   S21Matrix& operator+=(const S21Matrix& other);
   S21Matrix operator+(const S21Matrix& other);
@@ -52,7 +52,7 @@ class S21Matrix {
   void FillingMatrixRandom();
   void ZeroingMatrix();
   void FillingMatrixNumber(double number);
-  void print_matrix();
+  void print_matrix() const;
 
   bool operator==(const S21Matrix& other);
 
