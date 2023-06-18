@@ -168,6 +168,13 @@ S21Matrix S21Matrix::operator*(const S21Matrix &other) {
   result.MulMatrix(other);
   return result;
 }
+
+S21Matrix operator*(double num, S21Matrix &matrix) {
+  S21Matrix result(matrix);
+  result.MulNumber(num);
+  return result;
+}
+
 S21Matrix &S21Matrix::operator*=(const S21Matrix &other) {
   MulMatrix(other);
   return *this;
@@ -321,23 +328,6 @@ S21Matrix S21Matrix::InverseMatrix() {
   return result;
 }
 
-void S21Matrix::FillingMatrixRandom() {
-  srand(time(nullptr));
-  for (size_t i = 0; i < (size_t)rows_; ++i) {
-    for (size_t j = 0; j < (size_t)cols_; ++j) {
-      matrix_[i][j] = rand() % 10;
-    }
-  }
-}
-
-void S21Matrix::FillingMatrixNumber(double number) {
-  for (size_t i = 0; i < (size_t)rows_; ++i) {
-    for (size_t j = 0; j < (size_t)cols_; ++j) {
-      matrix_[i][j] = number;
-    }
-  }
-}
-
 int S21Matrix::GetRows() { return rows_; }
 int S21Matrix::GetCols() { return cols_; }
 
@@ -371,19 +361,4 @@ void S21Matrix::SetCols(const int cols) {
     }
   }
   *this = result;
-}
-
-void S21Matrix::print_matrix() const {
-  std::cout << "\nSTART\n";
-  for (size_t i = 0; i < (size_t)rows_; ++i) {
-    for (size_t j = 0; j < (size_t)cols_; ++j) {
-      std::cout << matrix_[i][j] << ' ';
-    }
-    std::cout << '\n';
-  }
-  std::cout << "\nEND\n";
-}
-
-bool S21Matrix::IsEmpty() {
-  return rows_ == 0 && cols_ == 0 && matrix_ == nullptr ? true : false;
 }

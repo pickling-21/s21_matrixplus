@@ -7,8 +7,8 @@ class S21Matrix {
  public:
   S21Matrix();                            // default constructor
   S21Matrix(int rows, int cols);          // parameterized constructor
-  S21Matrix(const S21Matrix& other);      // copy cnstructor
-  S21Matrix(S21Matrix&& other) noexcept;  // move cnstructor
+  S21Matrix(const S21Matrix& other);      // copy constructor
+  S21Matrix(S21Matrix&& other) noexcept;  // move constructor
   ~S21Matrix();                           // destructor
 
   // some operators overloads
@@ -24,11 +24,14 @@ class S21Matrix {
   S21Matrix& operator-=(const S21Matrix& other);
   S21Matrix operator-(const S21Matrix& other);
 
+  friend S21Matrix operator*(double, S21Matrix&);
   S21Matrix operator*(const S21Matrix& other);
   S21Matrix& operator*=(const S21Matrix& other);
 
   S21Matrix operator*(const double num);
   S21Matrix& operator*=(const double num);
+
+  bool operator==(const S21Matrix& other);
 
   // some public methods
   bool EqMatrix(const S21Matrix& other);
@@ -46,22 +49,12 @@ class S21Matrix {
 
   int GetCols();
   void SetCols(const int cols);
-  // DELETE
-
-  bool IsEmpty();
-  void FillingMatrixRandom();
-  void ZeroingMatrix();
-  void FillingMatrixNumber(double number);
-  void print_matrix() const;
-
-  bool operator==(const S21Matrix& other);
 
  private:
   // attributes
-  int rows_, cols_;  // rows and columns attributes
-  double** matrix_;  // pointer to the memory where the matrix will be allocated
+  int rows_, cols_;
+  double** matrix_;
   void Create(int rows, int cols);
-  void Swap(S21Matrix& other);
   S21Matrix Minor(int row, int col);
 };
 
