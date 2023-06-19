@@ -1,23 +1,17 @@
 CXX=gcc
 CFLAGS=-Wall -Wextra -Werror -std=c++17 -lstdc++
 TEST_FLAGS=--coverage 
+
 TEST=s21_matrix_oop_test
 TARGET=s21_matrix_oop
 
-
-SRC_DIRS := ./Project
+SRC_DIRS := ./
 SRCS := $(shell find $(SRC_DIRS) -name '*.cc' )
 SRCSH := $(shell find $(SRC_DIRS) -name '*.h' )
-
-# TEST_DIR = ./
-# TEST_SRC := $(shell find $(TEST_DIR) -name '*.cc' )
-# TEST := $(addsuffix .o,$(basename $(TEST_SRC)))
-TEST = Project/s21_matrix_oop_test
 
 OBJS = $(addsuffix .o,$(basename $(SRCS)))
 
 all:  $(TARGET).a
-
 
 push: clean
 	git add .
@@ -31,44 +25,20 @@ $(TARGET).a: $(OBJS)
 %.o: %.cc
 	$(CXX) $(CFLAGS) -c -o $@ $<
 
-# we added a pattern rule that specifies the desired flags for compiling .cc files. 
-# The % symbol is used as a wildcard to match any .cc file, and the $< variable 
-# is used to reference the prerequisite file (in this case, the .cc file). 
-# The $(CFLAGS) variable is used to specify the desired flags for compilation.
-
 clean: 
 	$(RM) $(OBJS) $(TARGET).a test
 	$(RM) gcov  *.info *.gcda *.gcno Tests/*.gcda Tests/*.gcno g$(TARGET).a 
 	rm -rf *.dSYM report
 
 test: clean $(TARGET).a
-	$(CXX) $(CFLAGS) $(TEST_FLAGS) $(TARGET).a $(TEST).cc -o test -lgtest
+	$(CXX) $(CFLAGS) $(TARGET).a $(TEST).cc -o test -lgtest
 	./test
-
-gcov_report:test
-	lcov -t "test" -o test.info --no-external -c -d . 
-	genhtml -o report/ test.info
-	open ./report/index.html
-
-install_lcov:
-	brew install lcov
 
 leaks: test
 	CK_FORK=no leaks --atExit -- ./test
-
-val:
-	cd Valgrind && sh run.sh
-
-valgrind: test
-	CK_FORK=no valgrind --trace-children=yes --track-fds=yes --track-origins=yes --leak-check=full --show-leak-kinds=all --verbose --log-file=RESULT.txt ./test
-	cat RESULT.txt
-
-docker:
-	rm -rf ~/Library/Containers/com.docker.docker
-	mkdir -p ~/goinfre/Docker/Data
-	ln -s ~/goinfre/Docker ~/Library/Containers/com.docker.docker
-
-
-# brew:
-# eval "$(/opt/goinfre/pickling/homebrew/bin/brew shellenv)"
-# chmod -R go-w "$(brew --prefix)/share/zsh"
+	
+style: 
+	cp ../materials/linters/.clang-format .clang-format 
+	clang-format -n $(SRCS)
+	clang-format -n $(SRCSH)
+	rm -rf .clang-format

@@ -1,21 +1,20 @@
-#ifndef S21_MATRIX_OOP_H
-#define S21_MATRIX_OOP_H
+#ifndef CPP_S21_MATRIX_PLUS_SRC_S21_MATRIX_OOP_H_
+#define CPP_S21_MATRIX_PLUS_SRC_S21_MATRIX_OOP_H_
 
-constexpr double eps = 1e-7;
+const double eps = 1e-7;
 
 class S21Matrix {
  public:
-  S21Matrix();                            // default constructor
-  S21Matrix(int rows, int cols);          // parameterized constructor
-  S21Matrix(const S21Matrix& other);      // copy constructor
-  S21Matrix(S21Matrix&& other) noexcept;  // move constructor
-  ~S21Matrix();                           // destructor
+  S21Matrix();
+  S21Matrix(int rows, int cols);
+  S21Matrix(const S21Matrix& other);
+  S21Matrix(S21Matrix&& other) noexcept;
+  ~S21Matrix();
 
-  // some operators overloads
-  double& operator()(int row, int col);  // index operator overload
+  double& operator()(int row, int col);
   double& operator()(int row, int col) const;
 
-  S21Matrix& operator=(const S21Matrix& other);  // assignment operator overload
+  S21Matrix& operator=(const S21Matrix& other);
   S21Matrix& operator=(S21Matrix&& other) noexcept;
 
   S21Matrix& operator+=(const S21Matrix& other);
@@ -33,7 +32,6 @@ class S21Matrix {
 
   bool operator==(const S21Matrix& other);
 
-  // some public methods
   bool EqMatrix(const S21Matrix& other);
   void SumMatrix(const S21Matrix& other);
   void SubMatrix(const S21Matrix& other);
@@ -44,18 +42,17 @@ class S21Matrix {
   double Determinant();
   S21Matrix InverseMatrix();
 
-  int GetRows();
+  int GetRows() { return rows_; };
   void SetRows(const int rows);
 
-  int GetCols();
+  int GetCols() { return cols_; };
   void SetCols(const int cols);
 
  private:
-  // attributes
   int rows_, cols_;
   double** matrix_;
   void Create(int rows, int cols);
   S21Matrix Minor(int row, int col);
 };
 
-#endif  // S21_MATRIX_OOP_H
+#endif  // CPP_S21_MATRIX_PLUS_SRC_S21_MATRIX_OOP_H_

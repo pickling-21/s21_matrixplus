@@ -14,13 +14,8 @@ void S21Matrix::Create(int rows, int cols) {
   }
 }
 
-/// @brief Базовый конструктор, инициализирующий матрицу некоторой заранее
-/// заданной размерностью
 S21Matrix::S21Matrix() { Create(1, 1); }
 
-/// @brief Параметризированный конструктор с количеством строк и столбцов
-/// @param rows
-/// @param cols
 S21Matrix::S21Matrix(int rows, int cols) {
   if (rows < 1 || cols < 1) {
     throw std::out_of_range(
@@ -29,32 +24,19 @@ S21Matrix::S21Matrix(int rows, int cols) {
   Create(rows, cols);
 }
 
-/// @brief Конструктор копирования (инициализация)
-/// Существует четыре случая вызова конструктора копирования:
-/// Когда объект является возвращаемым значением
-/// Когда объект передается(функции) по значению в качестве аргумента
-/// Когда объект конструируется на основе другого объекта (того же класса)
-////Когда компилятор генерирует временный объект (как в первом и втором случаях
-/// выше; как явное преобразование и т. д.
-/// @param other
-
 S21Matrix::S21Matrix(const S21Matrix &other) {
-  // не нужно очищать... Потому что это конструктор кописрования
   rows_ = other.rows_;
   cols_ = other.cols_;
+
   Create(rows_, cols_);
-  // выделила память
+
   for (size_t i = 0; i < (size_t)rows_; ++i) {
     for (size_t j = 0; j < (size_t)cols_; ++j) {
       matrix_[i][j] = other.matrix_[i][j];
     }
   }
 }
-// this -  указатель на текущий объект данного класса
-/// @brief Конструктор переноса. Не нужна проверка потому что это конструктор
-/// его нельзя вызвать к тому же самому. Вызывается std::move(a); Объект a после
-/// этого не будет содержать данные, вся инфа перенесеться.
-/// @param other
+
 S21Matrix::S21Matrix(S21Matrix &&other) noexcept {
   matrix_ = other.matrix_;
   rows_ = other.rows_;
@@ -65,9 +47,8 @@ S21Matrix::S21Matrix(S21Matrix &&other) noexcept {
   other.rows_ = 0;
 }
 
-/// @brief диструктор. Нужно ли сделать проверку на nullptr/
 S21Matrix::~S21Matrix() {
-  if (matrix_) {
+  if (matrix_ != nullptr) {
     delete[] matrix_[0];
     delete[] matrix_;
     matrix_ = nullptr;
@@ -76,26 +57,17 @@ S21Matrix::~S21Matrix() {
   }
 }
 
-// assignment operator overload
-
-/// @brief Оператор присваивания (copy). Other не трогаем, поэтому она const.
-/// Так как возвращамое значение &  а не указатель, а this - указатель, делаем
-/// *.
-/// @param other
-/// @return
 S21Matrix &S21Matrix::operator=(const S21Matrix &other) {
   if (&other != this) {
-    // &other - адрес other сравниваем с указателем this (адрес
-    // текущего объекта), чтобы не копировать по одинаковым адресам.
     if (rows_ != other.rows_ || cols_ != other.cols_) {
-      // если разные размеры очищаем и выделяем заново.
       delete[] matrix_[0];
       delete[] matrix_;
       Create(other.rows_, other.cols_);
     }
+
     rows_ = other.rows_;
     cols_ = other.cols_;
-    // копируем
+
     for (size_t i = 0; i < (size_t)rows_; ++i) {
       for (size_t j = 0; j < (size_t)cols_; ++j) {
         matrix_[i][j] = other.matrix_[i][j];
@@ -105,20 +77,15 @@ S21Matrix &S21Matrix::operator=(const S21Matrix &other) {
   return *this;
 }
 
-/// @brief Оператор присваивания(move). &&other, так как other может быть
-/// rvalue.
-/// @param other
-/// @return
 S21Matrix &S21Matrix::operator=(S21Matrix &&other) noexcept {
   if (&other != this) {
-    // Очищаем то что уже есть в том чему мы хотим присвоить
     delete[] matrix_[0];
     delete[] matrix_;
-    // Присваиваем
+
     rows_ = other.rows_;
     cols_ = other.cols_;
     matrix_ = other.matrix_;
-    // other не должно указывать на тоже самое. оно нам больше не нужно
+
     other.matrix_ = nullptr;
     other.rows_ = 0;
     other.cols_ = 0;
@@ -126,7 +93,6 @@ S21Matrix &S21Matrix::operator=(S21Matrix &&other) noexcept {
   return *this;
 }
 
-// индексация
 double &S21Matrix::operator()(int row, int col) {
   if (row >= rows_ || col >= cols_ || col < 0 || row < 0) {
     throw std::out_of_range("Incorrect input, index is out of range ");
@@ -140,6 +106,7 @@ double &S21Matrix::operator()(int row, int col) const {
   }
   return matrix_[row][col];
 }
+
 bool S21Matrix::operator==(const S21Matrix &other) { return EqMatrix(other); }
 
 S21Matrix &S21Matrix::operator+=(const S21Matrix &other) {
@@ -240,14 +207,13 @@ void S21Matrix::MulNumber(const double num) {
 void S21Matrix::MulMatrix(const S21Matrix &other) {
   if (cols_ != other.rows_) {
     throw std::out_of_range(
-        "The number of columns of the first matrix is not SetColsual to the "
+        "The number of columns of the first matrix is not equal to the "
         "number "
         "of rows of the second matrix");
   }
   S21Matrix result(rows_, other.cols_);
   for (size_t i = 0; i < (size_t)rows_; ++i) {
     for (size_t j = 0; j < (size_t)other.cols_; ++j) {
-      // result.matrix_[i][j] = 0;
       for (size_t s = 0; s < (size_t)other.rows_; ++s) {
         result.matrix_[i][j] += matrix_[i][s] * other.matrix_[s][j];
       }
@@ -328,13 +294,10 @@ S21Matrix S21Matrix::InverseMatrix() {
   return result;
 }
 
-int S21Matrix::GetRows() { return rows_; }
-int S21Matrix::GetCols() { return cols_; }
-
 void S21Matrix::SetRows(const int rows) {
   if (rows < 1) {
     throw std::out_of_range(
-        "Incorrect input, matrices should have cols and rowsSET");
+        "Incorrect input, matrices should have cols and rows");
   }
   S21Matrix result(rows, cols_);
   for (size_t i = 0; i < (size_t)rows; ++i) {
@@ -350,7 +313,7 @@ void S21Matrix::SetRows(const int rows) {
 void S21Matrix::SetCols(const int cols) {
   if (cols <= 0) {
     throw std::out_of_range(
-        "Incorrect input, matrices should have cols and rowsSET");
+        "Incorrect input, matrices should have cols and rows");
   }
   S21Matrix result(rows_, cols);
   for (size_t i = 0; i < (size_t)rows_; ++i) {
